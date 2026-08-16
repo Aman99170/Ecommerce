@@ -14,4 +14,10 @@ public class GlobalHandlerException {
 
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
+	
+	@ExceptionHandler(InvalidTitleException.class)
+    public ResponseEntity<String> handleInvalidTitle(
+    		InvalidTitleException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

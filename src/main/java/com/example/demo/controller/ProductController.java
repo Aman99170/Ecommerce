@@ -15,14 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Exception.ProductNotFoundException;
 import com.example.demo.dto.ProducRequesttDTO;
+import com.example.demo.dto.ProductRequestDTO;
 import com.example.demo.dto.ProductResponseDTO;
+import com.example.demo.dto.ProductResponseeDTO;
 import com.example.demo.service.ProductService;
 
 @RestController
 @RequestMapping("/api")
 public class ProductController {
 	
-	@Qualifier("fakeProductService")
+	@Qualifier("productService")
 	private final ProductService productService;
 	
 	ProductController(ProductService productService){
@@ -31,9 +33,9 @@ public class ProductController {
 	
 	
 	@GetMapping("/getProducts")
-	public ResponseEntity<List<ProductResponseDTO>> getAllProduct(){
+	public ResponseEntity<List<ProductResponseeDTO>> getAllProduct(){
 		
-		List<ProductResponseDTO> response = productService.getAllProducts();
+		List<ProductResponseeDTO> response = productService.getAllProducts1();
 		return ResponseEntity.ok(response);
 		
 	}
@@ -47,9 +49,24 @@ public class ProductController {
 		return ResponseEntity.ok(resp);
 	}
 	
+	@GetMapping("/getProduct/v1/{id}")
+	public ResponseEntity<ProductResponseeDTO> getProduct1(@PathVariable String id){
+		ProductResponseeDTO resp = productService.getProduct1(id);
+		if(resp==null) {
+			throw new ProductNotFoundException("Product not found with id "+id);
+		}
+		return ResponseEntity.ok(resp);
+	}
+	
 	@PostMapping("/products")
 	public ResponseEntity<ProductResponseDTO> createProduct(@RequestBody ProducRequesttDTO producRequesttDTO){
 		ProductResponseDTO resp = productService.createProduct(producRequesttDTO);
+		return ResponseEntity.ok(resp);
+	}
+	
+	@PostMapping("/products1")
+	public ResponseEntity<ProductResponseeDTO> createProduct1(@RequestBody ProductRequestDTO productRequestDTO){
+		ProductResponseeDTO resp = productService.createProduct(productRequestDTO);
 		return ResponseEntity.ok(resp);
 	}
 	
